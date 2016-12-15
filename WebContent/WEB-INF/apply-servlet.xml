@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:component-scan base-package="com.mankraft.bookappointment" />
+	<context:component-scan base-package="com.mankraft.homepage" />
+	
+	<bean class="com.mankraft.validator.BookAnAppointmentValidator" />
+	
+	
+	
+ 	<!-- Register the BookAppointment.properties -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="com.mankraft.properties.BookAppointment" />
+	</bean>
+ 	
+	<bean id="viewResolver"
+	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+          <property name="prefix">
+              <value>/WEB-INF/pages/</value>
+           </property>
+          <property name="suffix">
+             <value>.jsp</value>
+          </property>
+    </bean>
+    
+    <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+      <property name="url" value="jdbc:mysql://localhost:3308/spring"/>
+      <property name="username" value="root"/>
+      <property name="password" value="ROOT"/>
+   </bean>
+
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id="myjdbcTemplate" 
+      class="org.springframework.jdbc.core.JdbcTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   
+   <bean id="patientJDBCTemplate" 
+      class="com.mankraft.jdbcTemplate.PatientJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" /> 
+      <property name="jdbcTemplate"  ref="myjdbcTemplate" /> 
+   </bean>
+
+</beans>
